@@ -156,6 +156,13 @@ public class Paint {
 
 	
 	public void farbe() {
+		if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
+			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+			s.setzeFarbe(farbleinwand.hintergrundFarbe());
+		}
+	
+		
 		if (farbe.wurdeGedrueckt()) {
 			ff.setzeSichtbar(true);
 			farbeende.setzeSichtbar(true);
@@ -167,11 +174,6 @@ public class Paint {
 			farbeende.setzeSichtbar(false);
 			ff.setzeSichtbar(false);
 			
-		}
-		if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
-			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
-			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
-			s.setzeFarbe(farbleinwand.hintergrundFarbe());
 		}
 		
 	}
