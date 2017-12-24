@@ -89,11 +89,7 @@ public class Paint {
 				s.setzeLinienBreite(sd);
 			}
 
-			if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
-				farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
-				farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
-				s.setzeFarbe(farbleinwand.hintergrundFarbe());
-			}
+			
 			
 			
 			
@@ -131,18 +127,7 @@ public class Paint {
 				ende = true;
 			}
 
-			if (farbe.wurdeGedrueckt()) {
-				ff.setzeSichtbar(true);
-				farbeende.setzeSichtbar(true);
 
-			}
-
-			if (farbeende.wurdeGedrueckt()) {
-
-				farbeende.setzeSichtbar(false);
-				ff.setzeSichtbar(false);
-				
-			}
 
 			if (radieren.wurdeGedrueckt()) {
 
@@ -164,10 +149,33 @@ public class Paint {
 			this.stift();
 			this.hotkeys();
 			this.optionen();
+			this.farbe();
 		}
 		System.exit(0);
 	}
 
+	
+	public void farbe() {
+		if (farbe.wurdeGedrueckt()) {
+			ff.setzeSichtbar(true);
+			farbeende.setzeSichtbar(true);
+
+		}
+
+		if (farbeende.wurdeGedrueckt()) {
+
+			farbeende.setzeSichtbar(false);
+			ff.setzeSichtbar(false);
+			
+		}
+		if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
+			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+			s.setzeFarbe(farbleinwand.hintergrundFarbe());
+		}
+		
+	}
+	
 	public void optionen() {
 		if (Optionen.wurdeGedrueckt()) {
 			ffo.setzeSichtbar(true);
