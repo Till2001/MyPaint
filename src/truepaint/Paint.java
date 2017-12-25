@@ -1,21 +1,31 @@
 package truepaint;
 
-import basiX.*;
+import basiX.BeschriftungsFeld;
+import basiX.Dialog;
+import basiX.Farbe;
+import basiX.Fenster;
+import basiX.Hilfe;
+import basiX.Knopf;
+import basiX.Leinwand;
+import basiX.Maus;
+import basiX.Rollbalken;
+import basiX.Stift;
+import basiX.Tastatur;
+import basiX.ZahlenFeld;
 
 public class Paint {
 
 	int fb = 1600, fh = 900;
 	int penstate = 0;
 	int linstate = 0;
-	int y = 0;
-	int x = 0;
+	int y = 0, x = 0;
 	int sd = 2;
 	private boolean ende;
-
-	private Fenster f, ff,ffo;
+	private Fenster f, ff, ffo;
 	private Maus m;
 	private Stift s;
-	private Knopf endknopf, farbe, farbeende, linie, radieren, farbleinwand, runter, spray, hoch, pipette, farbvorschau, form,hotkeys, Optionen, optionende;
+	private Knopf endknopf, farbe, farbeende, linie, radieren, farbleinwand, runter, spray, hoch, pipette, farbvorschau,
+			form, hotkeys, Optionen, optionende;
 	private Leinwand lw;
 	private Tastatur t;
 	private Rollbalken rgbblaken1, rgbbalken2, rgbbalken3;
@@ -26,17 +36,17 @@ public class Paint {
 	public Paint() {
 		f = new Fenster("TruePaint by Till W", fb, fh);
 		ff = new Fenster("Farbauswahl", 1000, 500, false);
-		ffo = new Fenster("Optionen",800,600,false);
-		endknopf = new Knopf("Ende", fb-150, 0, 150, 50, f);
+		ffo = new Fenster("Optionen", 800, 600, false);
+		endknopf = new Knopf("Ende", fb - 150, 0, 150, 50, f);
 		farbeende = new Knopf("Schließen", 850, 450, 150, 50, ff);
 		farbe = new Knopf("Farbauswahl", 150, 0, 150, 50, f);
 		radieren = new Knopf("Radieren", 300, 0, 150, 50, f);
-		optionende = new Knopf("Uebernehmen",650,550,150,50,ffo);
+		optionende = new Knopf("Uebernehmen", 650, 550, 150, 50, ffo);
 		pipette = new Knopf("Pipette", 300, 50, 150, 50, f);
 		linie = new Knopf("Linie", 450, 0, 150, 50, f);
 		spray = new Knopf("Sparytool", 450, 50, 150, 50, f);
 		hoch = new Knopf("", 725, 50, 25, 25, f);
-		Optionen = new Knopf("Optionen", fb-150, 50, 150, 50, f);
+		Optionen = new Knopf("Optionen", fb - 150, 50, 150, 50, f);
 		farbvorschau = new Knopf("", 150, 50, 150, 50, f);
 		form = new Knopf("Formen", 0, 50, 150, 50, f);
 		runter = new Knopf("", 725, 75, 25, 25, f);
@@ -59,7 +69,7 @@ public class Paint {
 		z1 = new ZahlenFeld(600, 50, 125, 50, f);
 		z1.setzeSchriftFarbe(Farbe.SCHWARZ);
 		z1.setzeSchriftGroesse(50);
-		hotkeys=new Knopf("Hotkeys",0,0,150,50,f);
+		hotkeys = new Knopf("Hotkeys", 0, 0, 150, 50, f);
 		z1.setzeRand(Farbe.SCHWARZ, 2);
 		lw.setzeRand(Farbe.SCHWARZ, 2);
 		hoch.setzeIcon("/truepaint/hoch.png");
@@ -67,9 +77,7 @@ public class Paint {
 		farbvorschau.setzeBenutzbar(false);
 		farbvorschau.setzeRand(Farbe.SCHWARZ, 2);
 		farbleinwand.setzeBenutzbar(false);
-		
 		z1.setzeZahl(2);
-
 	}
 
 	public void mainmethod() {
@@ -84,60 +92,8 @@ public class Paint {
 				s.bewegeBis(m.hPosition(), m.vPosition());
 			}
 
-			if (z1.textWurdeGeaendert()) {
-				sd = z1.ganzZahl();
-				s.setzeLinienBreite(sd);
-			}
-
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			if (t.wurdeGedrueckt()) {
-
-				t.holeZeichen();
-
-				switch ((int) t.aktuellesZeichen()) {
-				case 15:
-					lw.ladeBild();
-					break;
-				case 19:
-					lw.speichere();
-					break;
-				case 27:
-					lw.loescheAlles();
-					break;
-				case 43:
-					z1.setzeZahl(z1.ganzZahl() + 1);
-					break;
-				case 45:
-
-					z1.setzeZahl(z1.ganzZahl() - 1);
-					break;
-				}
-			}
-
 			if (endknopf.wurdeGedrueckt()) {
 				ende = true;
-			}
-
-
-
-			if (radieren.wurdeGedrueckt()) {
-
-				if (radieren.text().equals("Radieren")) {
-					s.radiere();
-					radieren.setzeText("Stift");
-				} else {
-					s.normal();
-					radieren.setzeText("Radieren");
-				}
 			}
 
 			this.spray();
@@ -150,19 +106,45 @@ public class Paint {
 			this.hotkeys();
 			this.optionen();
 			this.farbe();
+			this.keybinding();
+			this.radieren();
 		}
 		System.exit(0);
 	}
 
-	
+	public void keybinding() {
+		if (t.wurdeGedrueckt()) {
+
+			t.holeZeichen();
+
+			switch ((int) t.aktuellesZeichen()) {
+			case 15:
+				lw.ladeBild();
+				break;
+			case 19:
+				lw.speichere();
+				break;
+			case 27:
+				lw.loescheAlles();
+				break;
+			case 43:
+				z1.setzeZahl(z1.ganzZahl() + 1);
+				break;
+			case 45:
+
+				z1.setzeZahl(z1.ganzZahl() - 1);
+				break;
+			}
+		}
+	}
+
 	public void farbe() {
 		if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
 			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
 			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
 			s.setzeFarbe(farbleinwand.hintergrundFarbe());
 		}
-	
-		
+
 		if (farbe.wurdeGedrueckt()) {
 			ff.setzeSichtbar(true);
 			farbeende.setzeSichtbar(true);
@@ -173,48 +155,28 @@ public class Paint {
 
 			farbeende.setzeSichtbar(false);
 			ff.setzeSichtbar(false);
-			
+
 		}
-		
+
 	}
-	
+
 	public void optionen() {
 		if (Optionen.wurdeGedrueckt()) {
 			ffo.setzeSichtbar(true);
 		}
-		
-		if(optionende.wurdeGedrueckt()) {
+
+		if (optionende.wurdeGedrueckt()) {
 			ffo.setzeSichtbar(false);
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 	}
 
 	public void hotkeys() {
-		if(hotkeys.wurdeGedrueckt()) {
-			Dialog.info("Hotkeys", " Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
+		if (hotkeys.wurdeGedrueckt()) {
+			Dialog.info("Hotkeys",
+					" Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
 		}
-		
+
 	}
 
 	public void stift() {
@@ -251,7 +213,11 @@ public class Paint {
 			break;
 		}
 
-		
+		if (z1.textWurdeGeaendert()) {
+			sd = z1.ganzZahl();
+			s.setzeLinienBreite(sd);
+		}
+
 	}
 
 	public void spray() {
@@ -334,6 +300,7 @@ public class Paint {
 			case "Kreis":
 				int sr = Dialog.eingabeINT("Kreis", "Welchen Radius soll der Kreis haben?");
 				Dialog.info("Infoi", "Klicken sie nun wo sie den Kreis möchten");
+				Hilfe.warte(250);
 				while (!m.wurdeGeklickt())
 					;
 				s.bewegeAuf(m.hPosition(), m.vPosition());
@@ -408,6 +375,19 @@ public class Paint {
 				break;
 			}
 
+		}
+	}
+
+	public void radieren() {
+		if (radieren.wurdeGedrueckt()) {
+
+			if (radieren.text().equals("Radieren")) {
+				s.radiere();
+				radieren.setzeText("Stift");
+			} else {
+				s.normal();
+				radieren.setzeText("Radieren");
+			}
 		}
 	}
 }
