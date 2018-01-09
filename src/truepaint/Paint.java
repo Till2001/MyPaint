@@ -25,10 +25,10 @@ public class Paint {
 	private Maus m;
 	private Stift s;
 	private Knopf endknopf, farbe, farbeende, linie, radieren, farbleinwand, runter, spray, hoch, pipette, farbvorschau,
-			form, hotkeys, Optionen, optionende;
+			form, hotkeys, Optionen, optionende, speichern, laden, randomfarbe;
 	private Leinwand lw;
 	private Tastatur t;
-	private Rollbalken rgbblaken1, rgbbalken2, rgbbalken3;
+	private Rollbalken rgbbalken1, rgbbalken2, rgbbalken3;
 	private ZahlenFeld z1;
 	private BeschriftungsFeld beschriftung1;
 	private String ausw;
@@ -51,15 +51,18 @@ public class Paint {
 		form = new Knopf("Formen", 0, 50, 150, 50, f);
 		runter = new Knopf("", 725, 75, 25, 25, f);
 		lw = new Leinwand(0, 100, fb, fh - 100, f);
+		speichern = new Knopf("Bild Speichern",0,50,150,50,ffo);
+		laden = new Knopf("Bild Laden",0,0,150,50,ffo);
 		farbleinwand = new Knopf("", 75, 75, 350, 350, ff);
-		rgbblaken1 = new Rollbalken(false, 500, 50, 50, 400, ff);
+		randomfarbe = new Knopf("Zufällige Farbe", 800,175,150,150,ff);
+		rgbbalken1 = new Rollbalken(false, 500, 50, 50, 400, ff);
 		rgbbalken2 = new Rollbalken(false, 600, 50, 50, 400, ff);
 		rgbbalken3 = new Rollbalken(false, 700, 50, 50, 400, ff);
 		m = new Maus(lw);
 		s = new Stift(lw);
 		t = new Tastatur();
 		ende = false;
-		rgbblaken1.setzeWerte(0, 255, 0);
+		rgbbalken1.setzeWerte(0, 255, 0);
 		rgbbalken2.setzeWerte(0, 255, 0);
 		rgbbalken3.setzeWerte(0, 255, 0);
 		beschriftung1 = new BeschriftungsFeld("Dicke des Stiftes", 600, 0, 150, 50, f);
@@ -79,9 +82,7 @@ public class Paint {
 		farbleinwand.setzeBenutzbar(false);
 		z1.setzeZahl(2);
 	}
-
-	public void mainmethod() {
-
+	public void mainmethod() {	
 		while (!ende) {
 			Hilfe.kurzePause();
 			fb = f.breite();
@@ -139,9 +140,9 @@ public class Paint {
 	}
 
 	public void farbe() {
-		if (rgbblaken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
-			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
-			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbblaken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+		if (rgbbalken1.wurdeBewegt() || rgbbalken2.wurdeBewegt() || rgbbalken3.wurdeBewegt()) {
+			farbvorschau.setzeHintergrundFarbe(Farbe.rgb(rgbbalken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
+			farbleinwand.setzeHintergrundFarbe(Farbe.rgb(rgbbalken1.wert(), rgbbalken2.wert(), rgbbalken3.wert()));
 			s.setzeFarbe(farbleinwand.hintergrundFarbe());
 		}
 
@@ -157,6 +158,12 @@ public class Paint {
 			ff.setzeSichtbar(false);
 
 		}
+		
+		if(randomfarbe.wurdeGedrueckt()) {
+			rgbbalken1.setzeWert(Hilfe.zufall(0, 255));
+			rgbbalken2.setzeWert(Hilfe.zufall(0, 255));
+			rgbbalken3.setzeWert(Hilfe.zufall(0, 255));
+		}
 
 	}
 
@@ -168,7 +175,17 @@ public class Paint {
 		if (optionende.wurdeGedrueckt()) {
 			ffo.setzeSichtbar(false);
 		}
-
+		
+		if (speichern.wurdeGedrueckt()) {
+			f.speichereZeichenflaeche();
+		}
+		
+		if(laden.wurdeGedrueckt()) {
+			f.ladeBildInZeichenflaeche();
+		}
+		
+		
+		
 	}
 
 	public void hotkeys() {
@@ -390,4 +407,6 @@ public class Paint {
 			}
 		}
 	}
+
+
 }
