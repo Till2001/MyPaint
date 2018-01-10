@@ -25,7 +25,7 @@ public class Paint {
 	private Maus m;
 	private Stift s;
 	private Knopf endknopf, farbe, farbeende, linie, radieren, farbleinwand, runter, spray, hoch, pipette, farbvorschau,
-			form, hotkeys, Optionen, optionende, speichern, laden, randomfarbe;
+			form, hotkeys, Optionen, optionende, speichern, laden, randomfarbe, farbfüllung;
 	private Leinwand lw;
 	private Tastatur t;
 	private Rollbalken rgbbalken1, rgbbalken2, rgbbalken3;
@@ -54,6 +54,7 @@ public class Paint {
 		speichern = new Knopf("Bild Speichern",0,50,150,50,ffo);
 		laden = new Knopf("Bild Laden",0,0,150,50,ffo);
 		farbleinwand = new Knopf("", 75, 75, 350, 350, ff);
+		farbfüllung = new Knopf("",fb-300,50,150,50,f);
 		randomfarbe = new Knopf("Zufällige Farbe", 800,175,150,150,ff);
 		rgbbalken1 = new Rollbalken(false, 500, 50, 50, 400, ff);
 		rgbbalken2 = new Rollbalken(false, 600, 50, 50, 400, ff);
@@ -77,6 +78,8 @@ public class Paint {
 		lw.setzeRand(Farbe.SCHWARZ, 2);
 		hoch.setzeIcon("/truepaint/hoch.png");
 		runter.setzeIcon("/truepaint/runter.png");
+//		farbfüllung.setzeIcon("/truepaint/fafü.png");
+		farbfüllung.setzeText("Füllen");
 		farbvorschau.setzeBenutzbar(false);
 		farbvorschau.setzeRand(Farbe.SCHWARZ, 2);
 		farbleinwand.setzeBenutzbar(false);
@@ -228,6 +231,9 @@ public class Paint {
 			}
 
 			break;
+		case 3:
+			this.farbfüll();
+			break;
 		}
 
 		if (z1.textWurdeGeaendert()) {
@@ -237,6 +243,16 @@ public class Paint {
 
 	}
 
+	private void farbfüll() {
+		if(farbfüllung.wurdeGedrueckt()) {
+			if(farbfüllung.text().equals("Füllen")) {
+				farbfüllung.setzeText("Stift");
+			}else {
+				farbfüllung.setzeText("Füllen");
+			}
+		}
+		
+	}
 	public void spray() {
 		if (spray.wurdeGedrueckt()) {
 			if (spray.text().equals("Spraytool")) {
