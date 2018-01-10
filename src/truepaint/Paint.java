@@ -1,5 +1,7 @@
 package truepaint;
 
+import java.awt.Color;
+
 import basiX.BeschriftungsFeld;
 import basiX.Dialog;
 import basiX.Farbe;
@@ -21,6 +23,7 @@ public class Paint {
 	int y = 0, x = 0;
 	int sd = 2;
 	private boolean ende;
+	
 	private Fenster f, ff, ffo;
 	private Maus m;
 	private Stift s;
@@ -32,7 +35,8 @@ public class Paint {
 	private ZahlenFeld z1;
 	private BeschriftungsFeld beschriftung1;
 	private String ausw;
-
+	private String ffül;
+	
 	public Paint() {
 		f = new Fenster("TruePaint by Till W", fb, fh);
 		ff = new Fenster("Farbauswahl", 1000, 500, false);
@@ -84,6 +88,7 @@ public class Paint {
 		farbvorschau.setzeRand(Farbe.SCHWARZ, 2);
 		farbleinwand.setzeBenutzbar(false);
 		z1.setzeZahl(2);
+		f.setzeHintergrundFarbe(Farbe.SCHWARZ);
 	}
 	public void mainmethod() {	
 		while (!ende) {
@@ -112,6 +117,7 @@ public class Paint {
 			this.farbe();
 			this.keybinding();
 			this.radieren();
+			this.farbfüllknopfswitch();
 		}
 		System.exit(0);
 	}
@@ -232,7 +238,7 @@ public class Paint {
 
 			break;
 		case 3:
-			this.farbfüll();
+			this.farbfüllung();
 			break;
 		}
 
@@ -243,16 +249,34 @@ public class Paint {
 
 	}
 
-	private void farbfüll() {
+	private void farbfüllung() {
+		if(m.wurdeGeklickt()) {
+			Dialog.info("WIP", "Work In Progress");
+			s.hoch();
+			s.bewegeAuf(m.hPosition(), m.vPosition());
+			int fxo = m.hPosition();
+			int fyo = m.vPosition();		//fy/fx Original
+			Color testc = f.farbeVon(fxo, fyo);
+			farbvorschau.setzeHintergrundFarbe(testc);
+		}				
+	}
+				
+
+	
+	
+	private void farbfüllknopfswitch() {
 		if(farbfüllung.wurdeGedrueckt()) {
 			if(farbfüllung.text().equals("Füllen")) {
 				farbfüllung.setzeText("Stift");
+				penstate=3;
 			}else {
 				farbfüllung.setzeText("Füllen");
+				penstate=1;
 			}
 		}
 		
 	}
+	
 	public void spray() {
 		if (spray.wurdeGedrueckt()) {
 			if (spray.text().equals("Spraytool")) {
