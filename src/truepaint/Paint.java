@@ -2,19 +2,7 @@ package truepaint;
 
 import java.awt.Color;
 
-import basiX.BeschriftungsFeld;
-import basiX.Dialog;
-import basiX.Farbe;
-import basiX.Fenster;
-import basiX.Hilfe;
-import basiX.Knopf;
-import basiX.Leinwand;
-import basiX.Maus;
-import basiX.Rollbalken;
-import basiX.Stift;
-import basiX.Tastatur;
-import basiX.ZahlenFeld;
-
+import basiX.*;
 public class Paint {
 
 	int fb = 1600, fh = 900;
@@ -22,13 +10,17 @@ public class Paint {
 	int linstate = 0;
 	int y = 0, x = 0;
 	int sd = 2;
+	int lin2fx = 0;
+	int lin2fy = 0;
+	int lin2fx2 = 0;
+	int lin2fy2 = 0;
 	private boolean ende;
-	
+	private boolean lin2w;
 	private Fenster f, ff, ffo;
 	private Maus m;
 	private Stift s;
 	private Knopf endknopf, farbe, farbeende, linie, radieren, farbleinwand, runter, spray, hoch, pipette, farbvorschau,
-			form, hotkeys, Optionen, optionende, speichern, laden, randomfarbe, farbfüllung;
+			form, hotkeys, Optionen, optionende, speichern, laden, randomfarbe, farbfüllung, lin2;
 	private Leinwand lw;
 	private Tastatur t;
 	private Rollbalken rgbbalken1, rgbbalken2, rgbbalken3;
@@ -53,6 +45,7 @@ public class Paint {
 		Optionen = new Knopf("Optionen", fb - 150, 50, 150, 50, f);
 		farbvorschau = new Knopf("", 150, 50, 150, 50, f);
 		form = new Knopf("Formen", 0, 50, 150, 50, f);
+		lin2 = new Knopf("Lin2",600,0,150,50,f);
 		runter = new Knopf("", 725, 75, 25, 25, f);
 		lw = new Leinwand(0, 100, fb, fh - 100, f);
 		speichern = new Knopf("Bild Speichern",0,50,150,50,ffo);
@@ -67,6 +60,7 @@ public class Paint {
 		s = new Stift(lw);
 		t = new Tastatur();
 		ende = false;
+		lin2w = false;
 		rgbbalken1.setzeWerte(0, 255, 0);
 		rgbbalken2.setzeWerte(0, 255, 0);
 		rgbbalken3.setzeWerte(0, 255, 0);
@@ -82,7 +76,6 @@ public class Paint {
 		lw.setzeRand(Farbe.SCHWARZ, 2);
 		hoch.setzeIcon("/truepaint/hoch.png");
 		runter.setzeIcon("/truepaint/runter.png");
-//		farbfüllung.setzeIcon("/truepaint/fafü.png");
 		farbfüllung.setzeText("Füllen");
 		farbvorschau.setzeBenutzbar(false);
 		farbvorschau.setzeRand(Farbe.SCHWARZ, 2);
@@ -240,6 +233,9 @@ public class Paint {
 		case 3:
 			this.farbfüllung();
 			break;
+		case 4:
+			this.lin2f();
+			break;
 		}
 
 		if (z1.textWurdeGeaendert()) {
@@ -249,7 +245,31 @@ public class Paint {
 
 	}
 
-	private void farbfüllung() {
+	public void lin2f() {
+		
+		if(m.istGedrueckt()) {
+			if(lin2w==false) {
+			lin2fx =m.hPosition();
+			lin2fy =m.vPosition();	
+			lin2w = true;
+			}else {
+				s.linie(lin2fx, lin2fy, lin2fx2, lin2fy2);
+				lin2w = false;
+				
+			}
+			}
+		
+		if(lin2w==true) {
+			s.linie(lin2fx, lin2fy, m.hPosition(), m.vPosition());
+			lin2fx2=m.hPosition();
+			lin2fy2=m.vPosition();
+			s.radiere();
+			s.linie(lin2fx, lin2fy, lin2fx2, lin2fy2);
+			s.normal();
+		}
+	}
+	
+	public void farbfüllung() {
 		if(m.wurdeGeklickt()) {
 			Dialog.info("WIP", "Work In Progress");
 			s.hoch();
@@ -261,10 +281,7 @@ public class Paint {
 		}				
 	}
 				
-
-	
-	
-	private void farbfüllknopfswitch() {
+	public void farbfüllknopfswitch() {
 		if(farbfüllung.wurdeGedrueckt()) {
 			if(farbfüllung.text().equals("Füllen")) {
 				farbfüllung.setzeText("Stift");
@@ -314,36 +331,37 @@ public class Paint {
 				linie.setzeText("Linie");
 			}
 		}
+		
+		if(lin2.wurdeGedrueckt()) {
+			if(lin2.text().equals("Lin2")) {
+				penstate = 4;
+				lin2.setzeText("Normaler Stift");
+			}else {
+				penstate = 0;
+				lin2.setzeText("Lin2");
+			}
+		}
+		
+		
+		
 	}
 
 	public void pfeile() {
 		if (hoch.wurdeGedrueckt()) {
-			if (z1.ganzzahl() >= 50) {
-				z1.setzeZahl(50);
-			} else {
 				z1.setzeZahl(z1.ganzzahl() + 1);
-			}
 		}
 
 		if (runter.wurdeGedrueckt()) {
-			if (z1.ganzZahl() <= 0) {
-				z1.setzeZahl(1);
-			} else {
 				z1.setzeZahl(z1.ganzzahl() - 1);
-			}
-
 		}
-
 	}
 
 	public void intov() {
-		if (sd >= 255) {
+		if (z1.ganzzahl() >= 255) {
 			z1.setzeZahl(255);
-			s.setzeLinienBreite(255);
-			sd = 255;
 		}
 
-		if (sd <= 0) {
+		if (z1.ganzzahl() <= 0) {
 			z1.setzeZahl(1);
 		}
 
@@ -415,7 +433,7 @@ public class Paint {
 			case "Rechteck":
 				int rl = Dialog.eingabeINT("Ringabe", "geben sie die Länge des Rechtecks an");
 				int rb = Dialog.eingabeINT("Ringabe", "geben sie die Breite des Rechtecks an");
-				Dialog.info("Info", "Klicken sie auf die obere rechte ecke des Rechtecks");
+				Dialog.info("Info", "Klicken sie auf die obere linke ecke des Rechtecks");
 				while (!m.istGedrueckt()) {
 					Hilfe.kurzePause();
 				}
