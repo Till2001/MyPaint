@@ -128,8 +128,7 @@ public class Paint {
 	public void keybinding() {
 		
 		if (hotkeys.wurdeGedrueckt()) {
-			Dialog.info("Hotkeys",
-					" Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
+			Dialog.info("Hotkeys"," Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
 		}
 		
 		if (t.wurdeGedrueckt()) {
