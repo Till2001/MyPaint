@@ -16,6 +16,7 @@ public class Paint {
 	int lin2fy2 = 0;
 	private boolean ende;
 	private boolean lin2w;
+	
 	private Fenster f, ff, ffo;
 	private Maus m;
 	private Stift s;
@@ -26,8 +27,9 @@ public class Paint {
 	private Rollbalken rgbbalken1, rgbbalken2, rgbbalken3;
 	private ZahlenFeld z1;
 	private BeschriftungsFeld beschriftung1;
+	private ListAuswahl schriftwahl;
 	private String ausw;
-	private String ffül;
+	private String test;
 	
 	public Paint() {
 		f = new Fenster("TruePaint by Till W", fb, fh);
@@ -45,6 +47,7 @@ public class Paint {
 		Optionen = new Knopf("Optionen", fb - 150, 50, 150, 50, f);
 		farbvorschau = new Knopf("", 150, 50, 150, 50, f);
 		form = new Knopf("Formen", 0, 50, 150, 50, f);
+		schriftwahl = new ListAuswahl(500,0,200,25,ffo);
 		lin2 = new Knopf("Lin2",600,0,150,50,f);
 		runter = new Knopf("", 725, 75, 25, 25, f);
 		lw = new Leinwand(0, 100, fb, fh - 100, f);
@@ -82,6 +85,10 @@ public class Paint {
 		farbleinwand.setzeBenutzbar(false);
 		z1.setzeZahl(2);
 		f.setzeHintergrundFarbe(Farbe.SCHWARZ);
+		schriftwahl.fuegeAn("Comic Sans");
+		schriftwahl.fuegeAn("new times Roman");
+		schriftwahl.fuegeAn("Ittalic");
+		test = Schrift.STANDARDSCHRIFTART;
 	}
 	public void mainmethod() {	
 		while (!ende) {
@@ -98,24 +105,33 @@ public class Paint {
 				ende = true;
 			}
 
-			this.spray();
-			this.pipettte();
-			this.pfeile();
-			this.linie();
-			this.intov();
-			this.formen();
-			this.stift();
-			this.hotkeys();
-			this.optionen();
-			this.farbe();
-			this.keybinding();
-			this.radieren();
-			this.farbfüllknopfswitch();
+			this.funktionen();
 		}
 		System.exit(0);
 	}
 
+	private void funktionen() {
+		this.spray();
+		this.pipettte();
+		this.pfeile();
+		this.linie();
+		this.intov();
+		this.formen();
+		this.stift();
+		this.optionen();
+		this.farbe();
+		this.keybinding();
+		this.radieren();
+		this.farbfüllknopfswitch();
+	}
+	
 	public void keybinding() {
+		
+		if (hotkeys.wurdeGedrueckt()) {
+			Dialog.info("Hotkeys",
+					" Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
+		}
+		
 		if (t.wurdeGedrueckt()) {
 
 			t.holeZeichen();
@@ -186,18 +202,18 @@ public class Paint {
 			f.ladeBildInZeichenflaeche();
 		}
 		
-		
-		
-	}
-
-	public void hotkeys() {
-		if (hotkeys.wurdeGedrueckt()) {
-			Dialog.info("Hotkeys",
-					" Strg+s=Speichern \n Strg+o=Laden \n Esc=alles Löschen \n \"+\"=Stiftdicke erhöhen \n \"-\"=Stiftdicke verringern ");
+		if(schriftwahl.wurdeGewaehlt()) {
+			schriftwahl.setzeGroesse(200, 100);
+			if(schriftwahl.gewaehlterText().equals(test)){
+				schriftwahl.setzeGroesse(200, 25);
+			}else {
+				schriftwahl.setzeSchriftArt(schriftwahl.gewaehlterText());
+				test = schriftwahl.gewaehlterText();
+				schriftwahl.setzeGroesse(200, 25);
+			}
 		}
-
+		
 	}
-
 	public void stift() {
 		switch (penstate) {
 		case 0:
@@ -270,14 +286,8 @@ public class Paint {
 	}
 	
 	public void farbfüllung() {
-		if(m.wurdeGeklickt()) {
-			Dialog.info("WIP", "Work In Progress");
-			s.hoch();
-			s.bewegeAuf(m.hPosition(), m.vPosition());
-			int fxo = m.hPosition();
-			int fyo = m.vPosition();		//fy/fx Original
-			Color testc = f.farbeVon(fxo, fyo);
-			farbvorschau.setzeHintergrundFarbe(testc);
+		if(m.istGedrueckt()) {
+			
 		}				
 	}
 				
