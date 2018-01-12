@@ -257,32 +257,68 @@ public class Paint {
 				fuex = m.hPosition();
 				lw.setzeFarbeBei(fuex, fuey, s.farbe());
 				while (fuew) {
+						if(i>=5) {
+							this.redraw();
+							i=0;
+						}
+					if(!lw.farbeVon(fuex, fuey).equals(s.farbe())) {
+						lw.setzeFarbeBei(fuex, fuey, s.farbe());
+						i++;
+					}else {
 						if(!lw.farbeVon(fuex+1, fuey).equals(s.farbe())) {
 							lw.setzeFarbeBei(fuex+1, fuey, s.farbe());
 							fuex++;
-							this.redraw();
+							i++;
 						}else {
 							if(!lw.farbeVon(fuex, fuey-1).equals(s.farbe())) {
 								lw.setzeFarbeBei(fuex, fuey-1, s.farbe());
 								fuey--;
-								this.redraw();
+								i++;
 							}else {
 								if(!lw.farbeVon(fuex-1, fuey).equals(s.farbe())) {
 									lw.setzeFarbeBei(fuex-1, fuey, s.farbe());
 									fuex--;
-									this.redraw();
+									i++;
 								}else {
 									if(!lw.farbeVon(fuex, fuey+1).equals(s.farbe())) {
 										lw.setzeFarbeBei(fuex, fuey+1, s.farbe());
 										fuey++;
-										this.redraw();
+										i++;
 									}else {
-										fuew = false;
+										if(!lw.farbeVon(fuex+1, fuey+1).equals(s.farbe())) {
+											lw.setzeFarbeBei(fuex+1, fuey+1, s.farbe());
+											fuey++;
+											fuex++;
+											i++;
+										}else {
+											if(!lw.farbeVon(fuex+1, fuey-1).equals(s.farbe())) {
+												lw.setzeFarbeBei(fuex+1, fuey-1, s.farbe());
+												fuey--;
+												fuex++;
+												i++;
+											}else {
+												if(!lw.farbeVon(fuex-1, fuey+1).equals(s.farbe())) {
+													lw.setzeFarbeBei(fuex-1, fuey+1, s.farbe());
+													fuey++;
+													fuex--;
+													i++;
+												}else {
+													if(!lw.farbeVon(fuex-1, fuey-1).equals(s.farbe())) {
+														lw.setzeFarbeBei(fuex-1, fuey-1, s.farbe());
+														fuey--;
+														fuex--;
+														i++;
+													}else {
+														fuew = false;
+													}
+												}
+											}
+										}
 									}
 								}
 							}
 							
-							
+						}
 							
 							
 							
@@ -290,7 +326,6 @@ public class Paint {
 						}
 				
 							}
-//				
 			}
 			
 			break;
