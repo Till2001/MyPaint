@@ -96,7 +96,7 @@ public class Paint {
 	}
 	public void mainmethod() {	
 		while (!ende) {
-//			Hilfe.kurzePause();
+			Hilfe.kurzePause();
 			fb = f.breite();
 			fh = f.hoehe();
 			lw.setzeGroesse(fb, fh - 100);
@@ -255,22 +255,42 @@ public class Paint {
 				s.bewegeAuf(m.hPosition(), m.vPosition());
 				fuey = m.vPosition();
 				fuex = m.hPosition();
+				lw.setzeFarbeBei(fuex, fuey, s.farbe());
 				while (fuew) {
-//					if(!lw.farbeVon(fuex,fuey).equals(s.farbe())) {
-						if(!lw.farbeVon(fuex, fuey).equals(Color.BLACK)) {
-							//lw.setzeFarbeBei(fuex+i, fuey, s.farbe());
-							lw.setzeFarbeBei(fuex, fuey, Color.BLACK);
+						if(!lw.farbeVon(fuex+1, fuey).equals(s.farbe())) {
+							lw.setzeFarbeBei(fuex+1, fuey, s.farbe());
 							fuex++;
-							lw.setzeGroesse(fb+1, fh-100);
-							lw.setzeGroesse(fb, fh-100);
-							
-							//System.out.println(String.valueOf(i));
+							this.redraw();
 						}else {
-							fuew = false;
+							if(!lw.farbeVon(fuex, fuey-1).equals(s.farbe())) {
+								lw.setzeFarbeBei(fuex, fuey-1, s.farbe());
+								fuey--;
+								this.redraw();
+							}else {
+								if(!lw.farbeVon(fuex-1, fuey).equals(s.farbe())) {
+									lw.setzeFarbeBei(fuex-1, fuey, s.farbe());
+									fuex--;
+									this.redraw();
+								}else {
+									if(!lw.farbeVon(fuex, fuey+1).equals(s.farbe())) {
+										lw.setzeFarbeBei(fuex, fuey+1, s.farbe());
+										fuey++;
+										this.redraw();
+									}else {
+										fuew = false;
+									}
+								}
+							}
+							
+							
+							
+							
+							
+							
 						}
 				
-					}
-//				}
+							}
+//				
 			}
 			
 			break;
@@ -286,6 +306,11 @@ public class Paint {
 
 	}
 
+	
+	public void redraw() {
+		lw.setzeGroesse(fb+1, fh-100);
+		lw.setzeGroesse(fb, fh-100);
+	}
 	public void lin2f() {
 		
 		if(m.istGedrueckt()) {
