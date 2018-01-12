@@ -5,7 +5,7 @@ import java.awt.Color;
 import basiX.*;
 public class Paint {
 
-	int fb = 1600, fh = 900;
+	int fb = 1400, fh = 750;
 	int penstate = 0;
 	int linstate = 0;
 	int y = 0, x = 0;
@@ -14,6 +14,10 @@ public class Paint {
 	int lin2fy = 0;
 	int lin2fx2 = 0;
 	int lin2fy2 = 0;
+	int fuex = 0;
+	int fuey = 0;
+	int füy1 = 0;
+	int füx2 = 0;
 	private boolean ende;
 	private boolean lin2w;
 	
@@ -92,11 +96,10 @@ public class Paint {
 	}
 	public void mainmethod() {	
 		while (!ende) {
-			Hilfe.kurzePause();
+//			Hilfe.kurzePause();
 			fb = f.breite();
 			fh = f.hoehe();
 			lw.setzeGroesse(fb, fh - 100);
-
 			if (m.wurdeBewegt()) {
 				s.bewegeBis(m.hPosition(), m.vPosition());
 			}
@@ -221,7 +224,6 @@ public class Paint {
 			} else {
 				s.hoch();
 			}
-
 			break;
 
 		case 1:
@@ -246,7 +248,31 @@ public class Paint {
 
 			break;
 		case 3:
-			this.farbfüllung();
+			if(m.istGedrueckt()) {
+				boolean fuew = true;
+				int i = 0;
+				s.hoch();
+				s.bewegeAuf(m.hPosition(), m.vPosition());
+				fuey = m.vPosition();
+				fuex = m.hPosition();
+				while (fuew) {
+//					if(!lw.farbeVon(fuex,fuey).equals(s.farbe())) {
+						if(!lw.farbeVon(fuex, fuey).equals(Color.BLACK)) {
+							//lw.setzeFarbeBei(fuex+i, fuey, s.farbe());
+							lw.setzeFarbeBei(fuex, fuey, Color.BLACK);
+							fuex++;
+							lw.setzeGroesse(fb+1, fh-100);
+							lw.setzeGroesse(fb, fh-100);
+							
+							//System.out.println(String.valueOf(i));
+						}else {
+							fuew = false;
+						}
+				
+					}
+//				}
+			}
+			
 			break;
 		case 4:
 			this.lin2f();
@@ -284,11 +310,6 @@ public class Paint {
 		}
 	}
 	
-	public void farbfüllung() {
-		if(m.istGedrueckt()) {
-			
-		}				
-	}
 				
 	public void farbfüllknopfswitch() {
 		if(farbfüllung.wurdeGedrueckt()) {
